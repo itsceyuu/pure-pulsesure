@@ -1,0 +1,11 @@
+{
+  "model": "random_forest",
+  "lower_threshold": 0.05848484848484849,
+  "upper_threshold": 0.5544444444444444,
+  "quality_score_definition": "round(100 * good_quality_probability)",
+  "status_policy": {
+    "reliable": "probability >= upper_threshold",
+    "caution": "lower_threshold < probability < upper_threshold",
+    "unreliable": "probability <= lower_threshold"
+  }
+}

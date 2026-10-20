@@ -1,0 +1,32 @@
+{
+  "model": "random_forest",
+  "validation_gate": {
+    "lower_threshold": 0.05848484848484849,
+    "upper_threshold": 0.5544444444444444,
+    "false_acceptance_rate": 0.048465266558966075,
+    "false_rejection_rate": 0.04964539007092199,
+    "good_acceptance_rate": 0.5319148936170213,
+    "poor_rejection_rate": 0.14054927302100162,
+    "reliable_coverage": 0.13815789473684212,
+    "caution_rate": 0.7381578947368421,
+    "unreliable_rate": 0.12368421052631579
+  },
+  "test_gate": {
+    "lower_threshold": 0.05848484848484849,
+    "upper_threshold": 0.5544444444444444,
+    "false_acceptance_rate": 0.10851063829787234,
+    "false_rejection_rate": 0.0058823529411764705,
+    "good_acceptance_rate": 0.4176470588235294,
+    "poor_rejection_rate": 0.10212765957446808,
+    "reliable_coverage": 0.190625,
+    "caution_rate": 0.7328125,
+    "unreliable_rate": 0.0765625
+  },
+  "accepted_signal_hr_mae_bpm": 9.409146165134855,
+  "accepted_signal_hr_sample_count": 122,
+  "limitations": [
+    "Thresholds are prototype validation-set decisions, not clinical standards.",
+    "BUT PPG labels are record-level and binary.",
+    "Caution represents model uncertainty, not a native dataset class."
+  ]
+}

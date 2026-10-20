@@ -1,0 +1,77 @@
+{
+  "validation_binary": {
+    "threshold": 0.28,
+    "accuracy": 0.8736842105263158,
+    "balanced_accuracy": 0.8266135038210796,
+    "precision_good": 0.6347305389221557,
+    "recall_good_sensitivity": 0.75177304964539,
+    "specificity_poor": 0.901453957996769,
+    "f1_good": 0.6883116883116883,
+    "false_acceptance_rate": 0.09854604200323101,
+    "false_rejection_rate": 0.24822695035460993,
+    "roc_auc": 0.8631056726131142,
+    "average_precision": 0.7411205046878433,
+    "confusion_matrix": [
+      [
+        558,
+        61
+      ],
+      [
+        35,
+        106
+      ]
+    ]
+  },
+  "test_binary": {
+    "threshold": 0.28,
+    "accuracy": 0.634375,
+    "balanced_accuracy": 0.6853566958698373,
+    "precision_good": 0.4041916167664671,
+    "recall_good_sensitivity": 0.7941176470588235,
+    "specificity_poor": 0.5765957446808511,
+    "f1_good": 0.5357142857142857,
+    "false_acceptance_rate": 0.42340425531914894,
+    "false_rejection_rate": 0.20588235294117646,
+    "roc_auc": 0.7715519399249061,
+    "average_precision": 0.502393887444409,
+    "confusion_matrix": [
+      [
+        271,
+        199
+      ],
+      [
+        35,
+        135
+      ]
+    ]
+  },
+  "validation_gate": {
+    "lower_threshold": 0.024496644295302017,
+    "upper_threshold": 0.38483221476510066,
+    "false_acceptance_rate": 0.048465266558966075,
+    "false_rejection_rate": 0.04964539007092199,
+    "good_acceptance_rate": 0.6666666666666666,
+    "poor_rejection_rate": 0.32310177705977383,
+    "reliable_coverage": 0.1631578947368421,
+    "caution_rate": 0.5644736842105263,
+    "unreliable_rate": 0.2723684210526316
+  },
+  "test_gate": {
+    "lower_threshold": 0.024496644295302017,
+    "upper_threshold": 0.38483221476510066,
+    "false_acceptance_rate": 0.32127659574468087,
+    "false_rejection_rate": 0.01764705882352941,
+    "good_acceptance_rate": 0.7294117647058823,
+    "poor_rejection_rate": 0.12127659574468085,
+    "reliable_coverage": 0.4296875,
+    "caution_rate": 0.4765625,
+    "unreliable_rate": 0.09375
+  },
+  "test_records": 640,
+  "test_subjects": 7,
+  "limitations": [
+    "BUT PPG is smartphone-camera PPG; MAX30102 deployment requires domain validation.",
+    "The dataset label is binary and applies to the full ten-second record.",
+    "No target performance is guaranteed before this held-out evaluation runs."
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "model": "PPGQualityResNet1D",
+  "checkpoint": "models/candidates/waveform_resnet1d.pt",
+  "input_shape": [
+    3,
+    300
+  ],
+  "view_order": [
+    "raw_robust",
+    "butterworth_bandpass",
+    "first_derivative"
+  ],
+  "selection_metric": "validation balanced accuracy at threshold 0.5",
+  "best_validation_balanced_accuracy": 0.8033261151021437,
+  "epochs_completed": 14,
+  "seed": 2026,
+  "parameter_count": 540597,
+  "class_weight_good": 3.7938342094421387
+}

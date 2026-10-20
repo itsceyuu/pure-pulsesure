@@ -124,7 +124,10 @@ id_ed25519
 
 # Keep trained models local; version the model selection metadata.
 /models/*
-!/models/model_selection.json
+!/models/quality_gate_thresholds.json
+!/models/waveform_training_metadata.json
+!/models/test_metrics_waveform_v2.json
+!/models/test_metrics.json
 
 # Common biomedical and machine-learning dataset artifacts
 *.dat
