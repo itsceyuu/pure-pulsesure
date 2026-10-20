@@ -71,6 +71,20 @@ jupyter lab --no-browser --ip=127.0.0.1 --port=8888
 The production bundle is written to `models/production/` only after notebook
 07 freezes validation-derived calibration and evaluates the held-out subjects.
 
+## Train the V3 subject ensemble
+
+The recommended follow-up to the V2 generalization failure is notebooks 08-10:
+
+```bash
+python scripts/prepare_but_ppg_v3.py
+python scripts/train_v3_ensemble.py
+python scripts/evaluate_v3_ensemble.py
+```
+
+V3 intentionally keeps three branches separate so their OOF and audit metrics
+can be inspected independently. Do not report only the best branch or tune the
+gate on `test_metrics.json`; thresholds are frozen from subject-wise OOF scores.
+
 ## Test
 
 The preprocessing test suite requires the AI service dependencies:

@@ -60,6 +60,18 @@ For the waveform candidate, run notebooks 05, 06, and 07. Notebook 06 never
 uses held-out test subjects for early stopping. Notebook 07 fits calibration
 and thresholds on validation subjects before opening the test split once.
 
+For the multi-view V3 ensemble, run notebooks 08, 09, and 10. V3 uses:
+
+- filtered red PPG, first derivative, and second derivative;
+- a compact log-power STFT branch;
+- morphology, periodicity, template-correlation, and spectral SQIs;
+- five subject-disjoint development folds;
+- equal-probability branch fusion followed by OOF Platt calibration.
+
+Notebook 09 is the long GPU stage. It writes every fold model and all OOF
+metrics under `models/production/v3/`. Notebook 10 does not retrain or retune;
+it only applies the frozen ensemble to the original audit subjects.
+
 ## Reproducibility contract
 
 - The default random seed is `2026`.
@@ -88,4 +100,12 @@ models/production/quality_model.pt
 models/production/model_metadata.json
 models/production/quality_gate_thresholds.json
 models/test_metrics_waveform_v2.json
+data/processed/but-ppg-v3/v3_representations.npz
+models/production/v3/waveform_fold_1.pt
+models/production/v3/stft_fold_1.pt
+models/production/v3/sqi_fold_1.joblib
+models/production/v3/ensemble_calibrator.joblib
+models/production/v3/oof_metrics.json
+models/production/v3/thresholds.json
+models/production/v3/test_metrics.json
 ```
