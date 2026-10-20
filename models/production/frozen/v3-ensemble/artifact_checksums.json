@@ -1,0 +1,27 @@
+{
+  "algorithm": "sha256",
+  "sha256": {
+    "ensemble_calibrator.joblib": "c69419e3dfe8760fcf85ac7cac611e1b52b7b60de512ee1010de5ffb39792a62",
+    "freeze_manifest.json": "70b967ad211976feeebd588ff7cf8f727efeb7f474597a6807d000440761b268",
+    "metadata.json": "17f2eff207d19b40185e79d86ff25e7f8a4565f4be6607db8ec6a546d1b580be",
+    "oof_metrics.json": "b54ff57929603b5dbce68dbd565b7edf65fbfe608e33c0382fc6e93c60cf5ad7",
+    "preprocessing_config.json": "edb36b0df702f243d52d7195d7290f6e9873b63e6140ca055422282c2949a7fd",
+    "sqi_fold_1.joblib": "36b505e9eab020db02fd929b41c135178efe52bd496f77a748b07941c6605175",
+    "sqi_fold_2.joblib": "9d575508298fab671ee616e80a3fcb20692e018ff6a0f31c4a36636ddab23782",
+    "sqi_fold_3.joblib": "527220419fc7dbdafb11c92ee372d83fd26c5174f7e75947b3dbfbf2db8a15c7",
+    "sqi_fold_4.joblib": "59a7e0b83050e4470775474590220c1daaaf31a7e12117282f15fc286ddf775c",
+    "sqi_fold_5.joblib": "064b58624425e83b407bb31c7522eb1052f8dc64654a358c52ad4569da55e82d",
+    "stft_fold_1.pt": "9844c1de4f66e6ca2cd8018ff6a23dac738c133c1247888ec4497341c73b87f6",
+    "stft_fold_2.pt": "af921fcdb05bb7298fc4eff912f1fbe0a0b94d51447297ae9e8197b0f06dd594",
+    "stft_fold_3.pt": "5da2749983ab862672ccf5b0ee7721ebb9edb424614ec7569fb2dd8d6792139d",
+    "stft_fold_4.pt": "818cd1deefdb4e7e3acfe2ebec5023d29690c34c6dd30bb0f7407e1952b436ce",
+    "stft_fold_5.pt": "f020bc32590a751416f531320fb7ed69568ef3e0857549a117065a89504e1286",
+    "test_metrics.json": "916cd2d3e649de8bc90cb090c283ff8f6512a5f4f15a2a0656b2a8135130f5e0",
+    "thresholds.json": "66dc9ee21533648b9cdd6ab6851143fd84f7ae3e0d4f980a940559e110dc5799",
+    "waveform_fold_1.pt": "2b1b15148f7cdb0745b99a3aa668f673a8cd3780f65384702851acf59a8150e5",
+    "waveform_fold_2.pt": "c03c8f961720dd149779c96ab4ccbd674a8fd7b242120da3f814486539dab7d0",
+    "waveform_fold_3.pt": "1be01758e18ffa5f261091e861ce11e203b5848c930096a8fe6c1342c31da1ee",
+    "waveform_fold_4.pt": "c4bf442671804525391023e77cd8eb6267fb852c15ba765ce96bbe7207564f8f",
+    "waveform_fold_5.pt": "34f214a879498ebc8ce14a48441701ff44b554e4bbabfd07308326259cd4a480"
+  }
+}

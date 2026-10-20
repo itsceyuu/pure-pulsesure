@@ -1,0 +1,45 @@
+{
+  "config": {
+    "sampling_rate_hz": 30.0,
+    "low_cut_hz": 0.5,
+    "high_cut_hz": 8.0,
+    "filter_order": 3,
+    "stft_window_samples": 64,
+    "stft_overlap_samples": 48,
+    "stft_fft_samples": 128,
+    "epsilon": 1e-08
+  },
+  "waveform_view_order": [
+    "filtered_ppg",
+    "first_derivative",
+    "second_derivative"
+  ],
+  "sqi_feature_names": [
+    "raw_range",
+    "raw_std",
+    "perfusion_proxy",
+    "clipping_ratio",
+    "filtered_skewness",
+    "filtered_excess_kurtosis",
+    "first_derivative_rms",
+    "second_derivative_rms",
+    "zero_crossing_rate",
+    "hjorth_mobility",
+    "hjorth_complexity",
+    "spectral_entropy",
+    "pulse_band_power_ratio",
+    "high_frequency_power_ratio",
+    "spectral_purity",
+    "dominant_frequency_hz",
+    "autocorrelation_peak",
+    "autocorrelation_bpm",
+    "peak_count",
+    "peak_interval_cv",
+    "peak_bpm",
+    "template_correlation",
+    "peak_prominence_cv",
+    "window_dominant_frequency_std",
+    "window_pulse_power_std"
+  ],
+  "channel_policy": "PPG_R matches the annotated BUT PPG channel"
+}
