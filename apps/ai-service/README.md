@@ -71,6 +71,61 @@ jupyter lab --no-browser --ip=127.0.0.1 --port=8888
 The production bundle is written to `models/production/` only after notebook
 07 freezes validation-derived calibration and evaluates the held-out subjects.
 
+## Train the V3 subject ensemble
+
+The recommended follow-up to the V2 generalization failure is notebooks 08-10:
+
+```bash
+python scripts/prepare_but_ppg_v3.py
+python scripts/train_v3_ensemble.py
+python scripts/evaluate_v3_ensemble.py
+```
+
+V3 intentionally keeps three branches separate so their OOF and audit metrics
+can be inspected independently. Do not report only the best branch or tune the
+gate on `test_metrics.json`; thresholds are frozen from subject-wise OOF scores.
+
+## Frozen prototype candidate
+
+The frozen candidate is the calibrated V3 equal-weight ensemble. The decision
+is based on subject-wise OOF development performance, not a post-hoc choice of
+the best audit branch. On the machine that contains the ignored model binaries,
+create and verify the immutable deployment bundle with:
+
+```bash
+python scripts/freeze_v3_production.py
+python scripts/freeze_v3_production.py --verify-only
+```
+
+The bundle is written to `models/production/frozen/v3-ensemble/`. It includes
+the five models from each branch, calibrator, preprocessing contract, frozen
+thresholds, evaluation reports, manifest, and SHA-256 checksums. It is a
+hackathon prototype candidate, not a clinically validated model.
+
+## Run the inference API
+
+On the host containing the complete frozen bundle:
+
+```bash
+source .venv/bin/activate
+python -m pip install -r apps/ai-service/requirements.txt
+export PURE_MODEL_BUNDLE_DIR="$PWD/models/production/frozen/v3-ensemble"
+export PURE_AI_DEVICE=auto
+uvicorn app.main:app --app-dir apps/ai-service --host 127.0.0.1 --port 8001
+```
+
+Then verify the service from the same host:
+
+```bash
+curl http://127.0.0.1:8001/health
+curl http://127.0.0.1:8001/model-info
+python scripts/smoke_test_ai_api.py
+```
+
+The public contract for Go integration is documented in
+`documentation/AI_API.md`. Swagger UI is available at `/docs` while the
+service is running.
+
 ## Test
 
 The preprocessing test suite requires the AI service dependencies:

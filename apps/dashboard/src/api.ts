@@ -21,6 +21,11 @@ export type ApiRecord = {
   model_name: string
   model_version: string
   inference_type: "simulated" | "live" | "none"
+  motion_detected: boolean
+  accel_std_g: number
+  gyro_rms_dps: number
+  accel_peak_delta_g: number
+  motion_fraction: number
   latency_ms: number
   created_at: string
 }

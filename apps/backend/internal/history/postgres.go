@@ -27,9 +27,19 @@ CREATE TABLE IF NOT EXISTS measurements (
     model_name        TEXT NOT NULL,
     model_version     TEXT NOT NULL,
     inference_type    TEXT NOT NULL,
+	motion_detected   BOOLEAN NOT NULL DEFAULT FALSE,
+	accel_std_g       DOUBLE PRECISION NOT NULL DEFAULT 0,
+	gyro_rms_dps      DOUBLE PRECISION NOT NULL DEFAULT 0,
+	accel_peak_delta_g DOUBLE PRECISION NOT NULL DEFAULT 0,
+	motion_fraction   DOUBLE PRECISION NOT NULL DEFAULT 0,
     latency_ms        DOUBLE PRECISION NOT NULL,
     created_at        TIMESTAMPTZ NOT NULL DEFAULT now()
-);`
+);
+ALTER TABLE measurements ADD COLUMN IF NOT EXISTS motion_detected BOOLEAN NOT NULL DEFAULT FALSE;
+ALTER TABLE measurements ADD COLUMN IF NOT EXISTS accel_std_g DOUBLE PRECISION NOT NULL DEFAULT 0;
+ALTER TABLE measurements ADD COLUMN IF NOT EXISTS gyro_rms_dps DOUBLE PRECISION NOT NULL DEFAULT 0;
+ALTER TABLE measurements ADD COLUMN IF NOT EXISTS accel_peak_delta_g DOUBLE PRECISION NOT NULL DEFAULT 0;
+ALTER TABLE measurements ADD COLUMN IF NOT EXISTS motion_fraction DOUBLE PRECISION NOT NULL DEFAULT 0;`
 
 type Postgres struct {
 	db *sql.DB
@@ -62,12 +72,14 @@ func (p *Postgres) Save(r *Record) error {
 	return p.db.QueryRow(`
 		INSERT INTO measurements (session_id, window_id, quality_score, status, decision,
 			usable_pct, artifact_ratio, artifact_duration, intervals, hr_bpm, hr_withheld,
-			cause, recommendation, model_name, model_version, inference_type, latency_ms)
-		VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17)
+			cause, recommendation, model_name, model_version, inference_type, motion_detected,
+			accel_std_g, gyro_rms_dps, accel_peak_delta_g, motion_fraction, latency_ms)
+		VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22)
 		RETURNING id, created_at`,
 		r.SessionID, r.WindowID, r.QualityScore, r.Status, r.Decision,
 		r.UsablePct, r.ArtifactRatio, r.ArtifactDuration, string(ivs), hr, r.HRWithheld,
-		r.Cause, r.Recommendation, r.ModelName, r.ModelVersion, r.InferenceType, r.LatencyMs,
+		r.Cause, r.Recommendation, r.ModelName, r.ModelVersion, r.InferenceType,
+		r.MotionDetected, r.AccelStdG, r.GyroRMSDPS, r.AccelPeakDeltaG, r.MotionFraction, r.LatencyMs,
 	).Scan(&r.ID, &r.CreatedAt)
 }
 
@@ -75,7 +87,8 @@ func (p *Postgres) List(sessionID string, limit int) ([]Record, error) {
 	rows, err := p.db.Query(`
 		SELECT id, session_id, window_id, quality_score, status, decision,
 			usable_pct, artifact_ratio, artifact_duration, intervals, hr_bpm, hr_withheld,
-			cause, recommendation, model_name, model_version, inference_type, latency_ms, created_at
+			cause, recommendation, model_name, model_version, inference_type, motion_detected,
+			accel_std_g, gyro_rms_dps, accel_peak_delta_g, motion_fraction, latency_ms, created_at
 		FROM measurements
 		WHERE ($1 = '' OR session_id = $1)
 		ORDER BY id DESC
@@ -93,6 +106,7 @@ func (p *Postgres) List(sessionID string, limit int) ([]Record, error) {
 		if err := rows.Scan(&r.ID, &r.SessionID, &r.WindowID, &r.QualityScore, &r.Status, &r.Decision,
 			&r.UsablePct, &r.ArtifactRatio, &r.ArtifactDuration, &ivs, &hr, &r.HRWithheld,
 			&r.Cause, &r.Recommendation, &r.ModelName, &r.ModelVersion, &r.InferenceType,
+			&r.MotionDetected, &r.AccelStdG, &r.GyroRMSDPS, &r.AccelPeakDeltaG, &r.MotionFraction,
 			&r.LatencyMs, &r.CreatedAt); err != nil {
 			return nil, err
 		}

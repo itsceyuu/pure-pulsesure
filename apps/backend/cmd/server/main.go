@@ -50,8 +50,14 @@ func main() {
 
 	var aiClient *ai.Client
 	if u := env("AI_SERVICE_URL", ""); u != "" {
-		aiClient = ai.NewClient(u, 5*time.Second)
+		aiClient = ai.NewClient(u, 20*time.Second)
 		log.Printf("AI service: %s", u)
+	}
+	activeModelName := mdl.ModelName
+	activeModelVersion := mdl.ModelVersion
+	if aiClient != nil {
+		activeModelName = ai.ModelName
+		activeModelVersion = "reported per inference"
 	}
 	srv := &http.Server{
 		Addr:         env("ADDR", ":8080"),
@@ -61,6 +67,6 @@ func main() {
 	}
 
 	log.Printf("PulseSure backend is running at %s (sessions: %d, model: %s %s)",
-		srv.Addr, len(st.List()), mdl.ModelName, mdl.ModelVersion)
+		srv.Addr, len(st.List()), activeModelName, activeModelVersion)
 	log.Fatal(srv.ListenAndServe())
 }

@@ -8,6 +8,7 @@ import (
 	"math"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"pulsesure/backend/internal/ai"
@@ -19,9 +20,13 @@ import (
 )
 
 const (
-	minSamples   = 640 // 10 detik pada 64 Hz
-	maxBodyBytes = 4 << 20
-	maxLimit     = 200
+	minWindowSeconds = 10.0
+	maxBodyBytes     = 4 << 20
+	maxLimit         = 200
+	motionAccelStdG  = 0.05
+	motionGyroRMSDPS = 12.0
+	severeAccelStdG  = 0.15
+	severeGyroRMSDPS = 45.0
 )
 
 type Server struct {
@@ -34,12 +39,25 @@ type Server struct {
 
 // MeasurementPayload: satu window dari sensor atau replay.
 type MeasurementPayload struct {
-	SessionID string    `json:"session_id"`
-	WindowID  int       `json:"window_id"`
-	Fs        float64   `json:"fs"`
-	Samples   []float64 `json:"samples"`
-	Source    string    `json:"source"` // "replay" atau "sensor"
-	SensorOK  bool      `json:"sensor_ok"`
+	SessionID string         `json:"session_id"`
+	WindowID  int            `json:"window_id"`
+	Fs        float64        `json:"fs"`
+	Samples   []float64      `json:"samples"`
+	Source    string         `json:"source"` // "replay" atau "sensor"
+	SensorOK  bool           `json:"sensor_ok"`
+	Motion    *MotionPayload `json:"motion,omitempty"`
+}
+
+// MotionPayload is a compact summary calculated from raw MPU6050 samples.
+// Acceleration uses g and angular velocity uses degrees per second.
+type MotionPayload struct {
+	Available       bool    `json:"available"`
+	SampleRateHz    float64 `json:"sample_rate_hz"`
+	Samples         int     `json:"samples"`
+	AccelStdG       float64 `json:"accel_std_g"`
+	GyroRMSDPS      float64 `json:"gyro_rms_dps"`
+	AccelPeakDeltaG float64 `json:"accel_peak_delta_g"`
+	MotionFraction  float64 `json:"motion_fraction"`
 }
 
 type Summary struct {
@@ -76,10 +94,17 @@ func NewServerWithAI(st *store.Store, mdl *model.DummyModel, repo history.Repo, 
 }
 
 func (s *Server) health(w http.ResponseWriter, r *http.Request) {
+	modelName := s.mdl.ModelName
+	inferenceType := "simulated"
+	if s.aiClient != nil {
+		modelName = ai.ModelName
+		inferenceType = "live"
+	}
 	writeJSON(w, http.StatusOK, map[string]any{
-		"status":   "ok",
-		"model":    s.mdl.ModelName,
-		"sessions": len(s.store.List()),
+		"status":         "ok",
+		"model":          modelName,
+		"inference_type": inferenceType,
+		"sessions":       len(s.store.List()),
 	})
 }
 
@@ -140,6 +165,10 @@ func (s *Server) postMeasurement(w http.ResponseWriter, r *http.Request) {
 		writeErr(w, http.StatusBadRequest, "session_id wajib diisi")
 		return
 	}
+	if err := validateMotion(p.Motion); err != nil {
+		writeErr(w, http.StatusBadRequest, err.Error())
+		return
+	}
 
 	// Sensor gagal: pengukuran ditolak, tidak ada HR yang ditampilkan.
 	if !p.SensorOK {
@@ -156,12 +185,13 @@ func (s *Server) postMeasurement(w http.ResponseWriter, r *http.Request) {
 		writeErr(w, http.StatusBadRequest, "fs harus lebih dari 0")
 		return
 	}
+	minSamples := int(math.Ceil(p.Fs * minWindowSeconds))
 	if len(p.Samples) < minSamples {
-		writeErr(w, http.StatusBadRequest, "jumlah sampel kurang dari 640 (10 detik)")
+		writeErr(w, http.StatusBadRequest, fmt.Sprintf("durasi sinyal kurang dari %.0f detik", minWindowSeconds))
 		return
 	}
 
-	rec, err := s.measure(p.SessionID, p.WindowID, p.Fs, p.Samples)
+	rec, err := s.measureWithMotion(p.SessionID, p.WindowID, p.Fs, p.Samples, p.Motion)
 	if err != nil {
 		writeErr(w, http.StatusInternalServerError, "gagal menyimpan hasil: "+err.Error())
 		return
@@ -186,62 +216,239 @@ func (s *Server) getHistory(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, recs)
 }
 
-// measure adalah alur utama: model -> interval -> quality gate -> HR (jika boleh) -> simpan.
+// measure menjalankan model V3 jika tersedia, lalu kembali ke dummy model jika
+// service AI gagal. Hasil selalu disimpan satu kali setelah penilaian selesai.
 func (s *Server) measure(sessionID string, windowID int, fs float64, x []float64) (history.Record, error) {
+	return s.measureWithMotion(sessionID, windowID, fs, x, nil)
+}
+
+func (s *Server) measureWithMotion(sessionID string, windowID int, fs float64, x []float64, motion *MotionPayload) (history.Record, error) {
 	mulai := time.Now()
 
-	prob, modelName, modelVersion, jenis := s.predict(x, fs)
-	ints := model.Intervals(prob, fs, s.mdl.ProbThreshold, 0.2)
-	a := quality.Assess(x, prob, s.mdl.ProbThreshold, ints)
-
-	rec := history.Record{
-		SessionID:        sessionID,
-		WindowID:         windowID,
-		QualityScore:     a.QualityScore,
-		Status:           a.Status,
-		Decision:         quality.Decision(a.Status),
-		UsablePct:        a.UsablePct,
-		ArtifactRatio:    a.ArtifactRatio,
-		ArtifactDuration: a.ArtifactDuration,
-		Intervals:        ints,
-		Cause:            a.Cause,
-		Recommendation:   a.Recommendation,
-		ModelName:        modelName,
-		ModelVersion:     modelVersion,
-		InferenceType:    jenis,
-		LatencyMs:        round2(float64(time.Since(mulai).Microseconds()) / 1000),
-		CreatedAt:        time.Now(),
+	var rec history.Record
+	if s.aiClient != nil {
+		live, err := s.assessWithAI(sessionID, windowID, fs, x)
+		if err == nil {
+			rec = live
+		} else {
+			log.Printf("AI service failed, using dummy model: %v", err)
+		}
+	}
+	if rec.InferenceType == "" {
+		prob := s.mdl.Predict(x)
+		ints := model.Intervals(prob, fs, s.mdl.ProbThreshold, 0.2)
+		a := quality.Assess(x, prob, s.mdl.ProbThreshold, ints)
+		rec = history.Record{
+			SessionID:        sessionID,
+			WindowID:         windowID,
+			QualityScore:     a.QualityScore,
+			Status:           a.Status,
+			Decision:         quality.Decision(a.Status),
+			UsablePct:        a.UsablePct,
+			ArtifactRatio:    a.ArtifactRatio,
+			ArtifactDuration: a.ArtifactDuration,
+			Intervals:        ints,
+			Cause:            a.Cause,
+			Recommendation:   a.Recommendation,
+			ModelName:        s.mdl.ModelName,
+			ModelVersion:     s.mdl.ModelVersion,
+			InferenceType:    "simulated",
+		}
+		if a.Status == quality.Unreliable {
+			rec.HRWithheld = true
+		} else if bpm, ok := dsp.EstimateHR(x, fs); ok {
+			rec.HRBpm = &bpm
+		}
 	}
 
-	// Quality gate: HR hanya ditampilkan jika sinyal tidak ditolak.
-	if a.Status == quality.Unreliable {
-		rec.HRWithheld = true
-	} else if bpm, ok := dsp.EstimateHR(x, fs); ok {
-		rec.HRBpm = &bpm
-	}
-
+	applyMotionGate(&rec, motion)
+	rec.LatencyMs = round2(float64(time.Since(mulai).Microseconds()) / 1000)
+	rec.CreatedAt = time.Now()
 	if err := s.repo.Save(&rec); err != nil {
 		return history.Record{}, err
 	}
 	return rec, nil
 }
 
-// predict uses the AI service when available. If it fails, it falls back to the
-// dummy model so the measurement is still recorded. Type "live" = real AI, "simulated" = dummy.
-func (s *Server) predict(x []float64, fs float64) ([]float64, string, string, string) {
-	if s.aiClient != nil {
-		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-		defer cancel()
-		res, err := s.aiClient.Predict(ctx, x, fs)
-		if err == nil && len(res.Prob) != len(x) {
-			err = fmt.Errorf("probability count %d does not match sample count %d", len(res.Prob), len(x))
-		}
-		if err == nil {
-			return res.Prob, res.ModelName, res.ModelVersion, "live"
-		}
-		log.Printf("AI service failed, using dummy model: %v", err)
+func validateMotion(m *MotionPayload) error {
+	if m == nil || !m.Available {
+		return nil
 	}
-	return s.mdl.Predict(x), s.mdl.ModelName, s.mdl.ModelVersion, "simulated"
+	values := []float64{m.SampleRateHz, m.AccelStdG, m.GyroRMSDPS, m.AccelPeakDeltaG, m.MotionFraction}
+	for _, value := range values {
+		if math.IsNaN(value) || math.IsInf(value, 0) || value < 0 {
+			return fmt.Errorf("ringkasan MPU6050 tidak valid")
+		}
+	}
+	if m.SampleRateHz <= 0 || m.Samples <= 0 || m.MotionFraction > 1 {
+		return fmt.Errorf("ringkasan MPU6050 tidak valid")
+	}
+	return nil
+}
+
+// applyMotionGate combines the optical model result with independent motion
+// evidence from the MPU6050. The thresholds are prototype quality gates.
+func applyMotionGate(rec *history.Record, m *MotionPayload) {
+	if m == nil || !m.Available {
+		return
+	}
+	rec.AccelStdG = round3(m.AccelStdG)
+	rec.GyroRMSDPS = round2(m.GyroRMSDPS)
+	rec.AccelPeakDeltaG = round3(m.AccelPeakDeltaG)
+	rec.MotionFraction = round3(m.MotionFraction)
+
+	motionDetected := m.AccelStdG >= motionAccelStdG ||
+		m.GyroRMSDPS >= motionGyroRMSDPS || m.MotionFraction >= 0.10
+	severeMotion := m.AccelStdG >= severeAccelStdG ||
+		m.GyroRMSDPS >= severeGyroRMSDPS || m.MotionFraction >= 0.35 ||
+		m.AccelPeakDeltaG >= 0.50
+	rec.MotionDetected = motionDetected
+	if !motionDetected {
+		return
+	}
+
+	rec.Cause = "Motion detected by MPU6050 during the measurement."
+	if severeMotion {
+		rec.Status = quality.Unreliable
+		rec.QualityScore = min(rec.QualityScore, 49)
+		rec.Recommendation = "Keep your wrist still, adjust the sensor, and repeat the measurement."
+	} else if rec.Status == quality.Reliable {
+		rec.Status = quality.Caution
+		rec.QualityScore = min(rec.QualityScore, 79)
+		rec.Recommendation = "Keep your wrist still and repeat the measurement if motion continues."
+	}
+	rec.Decision = quality.Decision(rec.Status)
+	rec.HRBpm = nil
+	rec.HRWithheld = true
+}
+
+// assessWithAI adapts arbitrary sensor sampling rates to the model's fixed
+// 10-second, 300-sample contract. Longer windows are evaluated per 10 seconds.
+func (s *Server) assessWithAI(sessionID string, windowID int, fs float64, x []float64) (history.Record, error) {
+	segmentSamples := int(math.Round(fs * ai.ExpectedWindowSecs))
+	if fs <= 0 || segmentSamples < 2 || len(x) < segmentSamples {
+		return history.Record{}, fmt.Errorf("AI model requires at least %.0f seconds of signal", ai.ExpectedWindowSecs)
+	}
+	segmentCount := len(x) / segmentSamples
+	if len(x) != segmentCount*segmentSamples {
+		return history.Record{}, fmt.Errorf("signal duration must be a multiple of %.0f seconds", ai.ExpectedWindowSecs)
+	}
+
+	status := quality.Reliable
+	worstRank := 0
+	allDisplayBPM := true
+	scoreTotal := 0
+	modelVersion := ""
+	recommendation := "Display BPM and continue monitoring."
+	intervals := []model.Interval{}
+
+	for i := 0; i < segmentCount; i++ {
+		start := i * segmentSamples
+		segment := x[start : start+segmentSamples]
+		resampled := resampleLinear(segment, ai.ExpectedSamples)
+
+		var candidateBPM *float64
+		if bpm, ok := dsp.EstimateHR(segment, fs); ok && bpm >= 30 && bpm <= 240 {
+			candidateBPM = &bpm
+		}
+		deviceID := fmt.Sprintf("%s-window-%d-segment-%d", sessionID, windowID, i+1)
+		result, err := s.aiClient.Predict(context.Background(), deviceID, resampled, candidateBPM)
+		if err != nil {
+			return history.Record{}, err
+		}
+		segmentStatus, rank, err := normalizeAIStatus(result.Status)
+		if err != nil {
+			return history.Record{}, err
+		}
+		if modelVersion != "" && modelVersion != result.ModelVersion {
+			return history.Record{}, fmt.Errorf("AI model version changed during one measurement")
+		}
+		modelVersion = result.ModelVersion
+		scoreTotal += result.QualityScore
+		allDisplayBPM = allDisplayBPM && result.DisplayBPM
+		if rank > worstRank {
+			worstRank = rank
+			status = segmentStatus
+			recommendation = result.RecommendedAction
+		}
+		if segmentStatus != quality.Reliable {
+			startS := float64(i) * ai.ExpectedWindowSecs
+			intervals = append(intervals, model.Interval{
+				StartS: startS,
+				EndS:   startS + ai.ExpectedWindowSecs,
+			})
+		}
+	}
+
+	totalDuration := float64(segmentCount) * ai.ExpectedWindowSecs
+	artifactDuration := float64(len(intervals)) * ai.ExpectedWindowSecs
+	artifactRatio := artifactDuration / totalDuration * 100
+	rec := history.Record{
+		SessionID:        sessionID,
+		WindowID:         windowID,
+		QualityScore:     int(math.Round(float64(scoreTotal) / float64(segmentCount))),
+		Status:           status,
+		Decision:         quality.Decision(status),
+		UsablePct:        round1(100 - artifactRatio),
+		ArtifactRatio:    round1(artifactRatio),
+		ArtifactDuration: round1(artifactDuration),
+		Intervals:        intervals,
+		Recommendation:   recommendation,
+		ModelName:        ai.ModelName,
+		ModelVersion:     modelVersion,
+		InferenceType:    "live",
+		HRWithheld:       true,
+	}
+	if status != quality.Reliable {
+		rec.Cause = "Signal quality was below the model threshold in one or more 10-second segments."
+	}
+	if allDisplayBPM && status == quality.Reliable {
+		if bpm, ok := dsp.EstimateHR(x, fs); ok {
+			rec.HRBpm = &bpm
+			rec.HRWithheld = false
+		}
+	}
+	return rec, nil
+}
+
+func normalizeAIStatus(value string) (string, int, error) {
+	switch strings.ToLower(value) {
+	case "reliable":
+		return quality.Reliable, 0, nil
+	case "caution":
+		return quality.Caution, 1, nil
+	case "unreliable":
+		return quality.Unreliable, 2, nil
+	default:
+		return "", 0, fmt.Errorf("AI service returned unknown status %q", value)
+	}
+}
+
+// resampleLinear preserves the signal duration while converting a window to
+// the model's 30 Hz grid. Sample j represents time j/30 seconds.
+func resampleLinear(x []float64, outputLength int) []float64 {
+	out := make([]float64, outputLength)
+	if len(x) == 0 || outputLength == 0 {
+		return out
+	}
+	if len(x) == 1 {
+		for i := range out {
+			out[i] = x[0]
+		}
+		return out
+	}
+	scale := float64(len(x)) / float64(outputLength)
+	for i := range out {
+		position := float64(i) * scale
+		left := int(math.Floor(position))
+		if left >= len(x)-1 {
+			out[i] = x[len(x)-1]
+			continue
+		}
+		fraction := position - float64(left)
+		out[i] = x[left]*(1-fraction) + x[left+1]*fraction
+	}
+	return out
 }
 
 // rejected membuat hasil untuk pengukuran yang tidak bisa dinilai.
@@ -291,6 +498,10 @@ func round1(x float64) float64 {
 
 func round2(x float64) float64 {
 	return math.Round(x*100) / 100
+}
+
+func round3(x float64) float64 {
+	return math.Round(x*1000) / 1000
 }
 
 func (s *Server) withCORS(next http.Handler) http.Handler {

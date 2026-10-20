@@ -128,9 +128,16 @@ id_ed25519
 !/models/waveform_training_metadata.json
 !/models/test_metrics_waveform_v2.json
 !/models/test_metrics.json
+!/models/production/
+!/models/production/frozen/
+!/models/production/frozen/v3-ensemble/
+!/models/production/frozen/v3-ensemble/*.json
 
 # Common biomedical and machine-learning dataset artifacts
 *.dat
+
+# Local Arduino build output
+/iot/firmware/**/build/
 *.hea
 *.qrs
 *.mat

@@ -1,0 +1,53 @@
+{
+  "freeze_id": "pure-ppg-quality-v3-ensemble-2026-10-20",
+  "status": "frozen_prototype_candidate",
+  "selected_candidate": "V3 calibrated equal-weight ensemble",
+  "selection_basis": {
+    "primary_evidence": "subject-wise out-of-fold development predictions",
+    "selection_rule": "highest OOF balanced accuracy, then ROC-AUC, under approximately 10% binary false-acceptance rate",
+    "selected_oof_balanced_accuracy": 0.8096470891293148,
+    "selected_oof_roc_auc": 0.8902235258301721,
+    "selected_oof_false_acceptance_rate": 0.0973724884080371
+  },
+  "frozen_thresholds": {
+    "binary_threshold": 0.23500000000000001,
+    "lower_threshold": 0.07319095477386936,
+    "upper_threshold": 0.41067839195979905,
+    "source": "subject-wise OOF development predictions"
+  },
+  "audit_observation": {
+    "accuracy": 0.7375,
+    "balanced_accuracy": 0.7461827284105131,
+    "roc_auc": 0.8247058823529412,
+    "gate_false_acceptance_rate": 0.17659574468085107,
+    "reliable_coverage": 0.3109375,
+    "note": "The SQI branch scored better on this audit set, but switching to it after viewing test results would be test-informed model selection."
+  },
+  "deployment_scope": "hackathon prototype and non-diagnostic measurement-quality support only",
+  "known_limitations": [
+    "The external audit result is below the desired target and shows subject/domain shift.",
+    "BUT PPG smartphone-camera recordings do not validate MAX30102 deployment performance.",
+    "The original audit subjects were already inspected during V2 development and are not a pristine final test set.",
+    "Do not retune this frozen version on its audit results; create a new version and evaluation set instead."
+  ],
+  "bundle_source_commit": "96a9bdfd13780172ee0a26e5afa5edaaf25a0b53",
+  "fold_count": 5,
+  "runtime_artifacts": [
+    "ensemble_calibrator.joblib",
+    "waveform_fold_1.pt",
+    "stft_fold_1.pt",
+    "sqi_fold_1.joblib",
+    "waveform_fold_2.pt",
+    "stft_fold_2.pt",
+    "sqi_fold_2.joblib",
+    "waveform_fold_3.pt",
+    "stft_fold_3.pt",
+    "sqi_fold_3.joblib",
+    "waveform_fold_4.pt",
+    "stft_fold_4.pt",
+    "sqi_fold_4.joblib",
+    "waveform_fold_5.pt",
+    "stft_fold_5.pt",
+    "sqi_fold_5.joblib"
+  ]
+}

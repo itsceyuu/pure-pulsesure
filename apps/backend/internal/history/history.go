@@ -28,6 +28,11 @@ type Record struct {
 	ModelName        string           `json:"model_name"`
 	ModelVersion     string           `json:"model_version"`
 	InferenceType    string           `json:"inference_type"`
+	MotionDetected   bool             `json:"motion_detected"`
+	AccelStdG        float64          `json:"accel_std_g"`
+	GyroRMSDPS       float64          `json:"gyro_rms_dps"`
+	AccelPeakDeltaG  float64          `json:"accel_peak_delta_g"`
+	MotionFraction   float64          `json:"motion_fraction"`
 	LatencyMs        float64          `json:"latency_ms"`
 	CreatedAt        time.Time        `json:"created_at"`
 }

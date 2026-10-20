@@ -74,6 +74,48 @@ func TestSensorGagalDitolak(t *testing.T) {
 	}
 }
 
+func TestMPU6050MotionWithholdsHeartRate(t *testing.T) {
+	body := map[string]any{
+		"session_id": "t", "window_id": 6, "fs": 64,
+		"samples": pulsaUji(640), "source": "sensor", "sensor_ok": true,
+		"motion": map[string]any{
+			"available": true, "sample_rate_hz": 100, "samples": 1000,
+			"accel_std_g": 0.2, "gyro_rms_dps": 55.0,
+			"accel_peak_delta_g": 0.7, "motion_fraction": 0.4,
+		},
+	}
+	rec := kirim(serverUji(t), http.MethodPost, "/api/measurements", body)
+	if rec.Code != http.StatusOK {
+		t.Fatalf("status = %d, body = %s", rec.Code, rec.Body.String())
+	}
+	var out history.Record
+	if err := json.Unmarshal(rec.Body.Bytes(), &out); err != nil {
+		t.Fatal(err)
+	}
+	if !out.MotionDetected || out.Status != "UNRELIABLE" || !out.HRWithheld || out.HRBpm != nil {
+		t.Fatalf("strong MPU6050 motion must withhold HR, got %+v", out)
+	}
+	if out.AccelStdG != 0.2 || out.GyroRMSDPS != 55 || out.MotionFraction != 0.4 {
+		t.Fatalf("motion metrics not preserved: %+v", out)
+	}
+}
+
+func TestInvalidMPU6050SummaryRejected(t *testing.T) {
+	body := map[string]any{
+		"session_id": "t", "window_id": 7, "fs": 64,
+		"samples": pulsaUji(640), "source": "sensor", "sensor_ok": true,
+		"motion": map[string]any{
+			"available": true, "sample_rate_hz": 100, "samples": 1000,
+			"accel_std_g": 0.01, "gyro_rms_dps": 1.0,
+			"accel_peak_delta_g": 0.02, "motion_fraction": 1.5,
+		},
+	}
+	rec := kirim(serverUji(t), http.MethodPost, "/api/measurements", body)
+	if rec.Code != http.StatusBadRequest {
+		t.Fatalf("status = %d, body = %s", rec.Code, rec.Body.String())
+	}
+}
+
 func TestAnalyzeMenyimpanRiwayat(t *testing.T) {
 	h := serverUji(t)
 	rec := kirim(h, http.MethodPost, "/api/sessions/t/analyze", nil)
