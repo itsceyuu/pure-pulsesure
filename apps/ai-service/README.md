@@ -102,6 +102,30 @@ the five models from each branch, calibrator, preprocessing contract, frozen
 thresholds, evaluation reports, manifest, and SHA-256 checksums. It is a
 hackathon prototype candidate, not a clinically validated model.
 
+## Run the inference API
+
+On the host containing the complete frozen bundle:
+
+```bash
+source .venv/bin/activate
+python -m pip install -r apps/ai-service/requirements.txt
+export PURE_MODEL_BUNDLE_DIR="$PWD/models/production/frozen/v3-ensemble"
+export PURE_AI_DEVICE=auto
+uvicorn app.main:app --app-dir apps/ai-service --host 127.0.0.1 --port 8001
+```
+
+Then verify the service from the same host:
+
+```bash
+curl http://127.0.0.1:8001/health
+curl http://127.0.0.1:8001/model-info
+python scripts/smoke_test_ai_api.py
+```
+
+The public contract for Go integration is documented in
+`documentation/AI_API.md`. Swagger UI is available at `/docs` while the
+service is running.
+
 ## Test
 
 The preprocessing test suite requires the AI service dependencies:
