@@ -407,14 +407,6 @@ go test ./...
 
 All current Go backend packages and tests pass with Go 1.27.3.
 
-## Screenshots and demo
-
-### Dashboard preview
-
-![PURE dashboard — Reliable](PURE_Product_Video/02_Approved_Assets/dashboard/dashboard_reliable_approved_v1.png)
-
-![PURE dashboard — Caution](PURE_Product_Video/02_Approved_Assets/dashboard/dashboard_caution_approved_v1.png)
-
 ### Submission links
 
 | Demo video | Live prototype |
