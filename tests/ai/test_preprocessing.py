@@ -17,6 +17,10 @@ from app.services.preprocessing import (  # noqa: E402
     load_but_ppg_record,
     preprocess_ppg,
 )
+from app.services.waveform_preprocessing import (  # noqa: E402
+    WaveformPreprocessingConfig,
+    preprocess_waveform_views,
+)
 
 
 class LoaderTests(unittest.TestCase):
@@ -36,7 +40,7 @@ class LoaderTests(unittest.TestCase):
             np.testing.assert_allclose(record.waveform, [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])
             self.assertEqual(record.source_layout, "legacy_8_signals_x_1_sample")
 
-    def test_prefers_green_channel_in_modern_layout(self) -> None:
+    def test_prefers_annotated_red_channel_in_modern_layout(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
             record_directory = Path(temporary_directory) / "146014"
             record_directory.mkdir()
@@ -66,9 +70,9 @@ class LoaderTests(unittest.TestCase):
 
             np.testing.assert_allclose(
                 record.waveform,
-                [10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0, 80.0],
+                [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0],
             )
-            self.assertEqual(record.selected_channel, "PPG_G")
+            self.assertEqual(record.selected_channel, "PPG_R")
 
 
 class PreprocessingTests(unittest.TestCase):
@@ -97,6 +101,28 @@ class PreprocessingTests(unittest.TestCase):
         self.assertTrue(all(np.isfinite(value) for value in features.values()))
         self.assertGreater(features["estimated_bpm"], 60.0)
         self.assertLess(features["estimated_bpm"], 90.0)
+
+    def test_waveform_views_preserve_time_axis_and_are_finite(self) -> None:
+        sampling_rate_hz = 30.0
+        time = np.arange(300) / sampling_rate_hz
+        waveform = 2.0 + 0.2 * time + np.sin(2 * np.pi * 1.25 * time)
+
+        views = preprocess_waveform_views(
+            waveform,
+            WaveformPreprocessingConfig(sampling_rate_hz=sampling_rate_hz),
+        )
+
+        self.assertEqual(views.shape, (3, 300))
+        self.assertEqual(views.dtype, np.float32)
+        self.assertTrue(np.isfinite(views).all())
+        self.assertAlmostEqual(float(np.mean(views[1])), 0.0, places=5)
+        self.assertAlmostEqual(float(np.std(views[1])), 1.0, places=5)
+
+    def test_waveform_views_keep_constant_poor_quality_candidate(self) -> None:
+        views = preprocess_waveform_views(np.ones(300, dtype=np.float64))
+
+        self.assertEqual(views.shape, (3, 300))
+        np.testing.assert_allclose(views, 0.0, atol=1e-7)
 
 
 if __name__ == "__main__":

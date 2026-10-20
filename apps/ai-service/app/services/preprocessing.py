@@ -7,8 +7,9 @@ The dataset contains two WFDB layouts:
 
 This module reads both layouts without requiring the external ``wfdb``
 package and normalizes them to one 1-D PPG waveform at 30 Hz. For RGB
-records, the green channel is preferred because it is the most appropriate
-channel for pulse analysis in this prototype.
+records, the red channel is preferred because the BUT PPG quality labels were
+created from the red waveform. Matching the annotated channel is more
+important here than the generic convention of using green smartphone PPG.
 """
 
 from __future__ import annotations
@@ -135,7 +136,7 @@ def _read_header(header_path: Path) -> tuple[int, float, int, list[_SignalDefini
 
 def load_but_ppg_record(
     record_directory: str | Path,
-    preferred_channels: Iterable[str] = ("PPG_G", "PPG_R", "PPG_B"),
+    preferred_channels: Iterable[str] = ("PPG_R", "PPG_G", "PPG_B"),
 ) -> PPGRecord:
     """Load one BUT PPG record and return a single 1-D waveform.
 

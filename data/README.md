@@ -23,6 +23,17 @@ Then run:
 python3 scripts/prepare_but_ppg.py
 ```
 
+For the waveform model, run:
+
+```bash
+python3 scripts/prepare_but_ppg_waveforms.py
+```
+
+This V2 export selects `PPG_R` for RGB records because the dataset's quality
+annotations were created from the red channel. It writes three aligned model
+views per record: robust-scaled raw PPG, a zero-phase 0.5-5 Hz Butterworth
+band-pass signal, and the normalized first derivative.
+
 The preparation script creates subject-disjoint train, validation, and test
 splits. The first three digits of each record ID identify the subject, so
 records from one person never appear in more than one split.
@@ -38,6 +49,8 @@ defined later from two validation-set thresholds around the model probability:
 - Unreliable: high confidence that the signal is unsuitable.
 
 These thresholds are prototype decisions and are not clinical standards.
+The database was acquired through smartphone cameras; it is not a substitute
+for validation using the proposed MAX30102 hardware.
 
 ## Required attribution
 

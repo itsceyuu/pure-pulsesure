@@ -10,13 +10,16 @@ Run them in order:
 2. `02_preprocessing_but_ppg.ipynb` - waveform decoding, filtering, normalization, features, and batch preparation.
 3. `03_train_baselines.ipynb` - Logistic Regression and Random Forest baselines.
 4. `04_evaluate_quality_gate.ipynb` - validation thresholds and final held-out evaluation.
+5. `05_preprocess_waveforms_v2.ipynb` - corrected red-channel, waveform-preserving preprocessing.
+6. `06_train_waveform_resnet.ipynb` - compact ResNet1D training with class-weighted loss.
+7. `07_evaluate_waveform_resnet.ipynb` - validation-only calibration and held-out evaluation.
 
 Install notebook-only dependencies from the repository root:
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install -r apps/ai-service/requirements-notebooks.txt
+python -m pip install -r apps/ai-service/requirements-training.txt
 jupyter lab
 ```
 
@@ -27,7 +30,14 @@ the notebooks:
 ```bash
 export PURE_BUT_PPG_DIR=/absolute/path/to/but-ppg-2.0.0
 export PURE_PROCESSED_DIR=/absolute/path/to/processed/but-ppg-v2
+export PURE_WAVEFORM_DIR=/absolute/path/to/processed/but-ppg-waveforms-v2
 ```
+
+The V2 notebooks do not guarantee a target score. They correct a material
+channel mismatch and retain temporal information that the feature baseline
+discarded. Compare models on the same subject-disjoint test set using balanced
+accuracy, good-class F1, specificity, and false-acceptance rate in addition to
+ordinary accuracy.
 
 Generated datasets and model binaries remain ignored by Git. Commit only code,
 notebooks, documentation, and small JSON metric/threshold summaries that the
