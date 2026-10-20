@@ -419,7 +419,7 @@ All current Go backend packages and tests pass with Go 1.27.3.
 
 | Demo video | Live prototype |
 | --- | --- |
-| [Watch the demo video](https://drive.google.com/file/d/1E5B74wU5OoYh8T4NfOUe4aE-SbS2N2JO/view?usp=drive_link) | [Open the live prototype](https://restaurants-illinois-trivia-roulette.trycloudflare.com/) |
+| [Watch the demo video](https://drive.google.com/file/d/1E5B74wU5OoYh8T4NfOUe4aE-SbS2N2JO/view?usp=drive_link) | [Open the live prototype](https://usually-danny-transmit-strongly.trycloudflare.com/) |
 
 The prototype currently uses a temporary Cloudflare Quick Tunnel URL. Verify
 both links immediately before submission and ensure the Drive video is shared
