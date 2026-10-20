@@ -1,0 +1,10 @@
+{
+  "description": "An AI-powered clinical dashboard for bedside nurses that assesses PPG signal reliability, guiding corrective actions to ensure accurate heart rate monitoring.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}

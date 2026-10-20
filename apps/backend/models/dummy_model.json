@@ -1,0 +1,12 @@
+{
+  "name": "dummy-artifact",
+  "version": "0.1",
+  "fs": 64,
+  "base_prob": 0.05,
+  "high_prob": 0.95,
+  "spike_step": 0.8,
+  "flat_eps": 0.0001,
+  "flat_min_samples": 32,
+  "spike_margin": 16,
+  "prob_threshold": 0.5
+}
