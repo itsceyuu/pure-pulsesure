@@ -1,0 +1,43 @@
+# Local operating-system and temporary files
+.DS_Store
+*.log
+*.tmp
+*.swp
+
+# Raw assets and datasets: keep only documentation and folder placeholders
+01_Raw_Assets/**/*
+!01_Raw_Assets/**/
+!01_Raw_Assets/**/.gitkeep
+!01_Raw_Assets/ASSET_GUIDE.md
+!01_Raw_Assets/asset-inventory-v1.csv
+
+# Approved production assets
+02_Approved_Assets/**/*
+!02_Approved_Assets/**/
+!02_Approved_Assets/**/.gitkeep
+
+# Assets copied into Remotion and local data inputs
+03_Remotion_Project/public/**/*
+!03_Remotion_Project/public/**/
+!03_Remotion_Project/public/**/.gitkeep
+!03_Remotion_Project/public/fonts/*.woff2
+!03_Remotion_Project/public/fonts/Montserrat-LICENSE.txt
+03_Remotion_Project/src/data/**/*
+!03_Remotion_Project/src/data/**/
+!03_Remotion_Project/src/data/**/.gitkeep
+
+# Remotion dependencies, caches, and rendered output
+03_Remotion_Project/node_modules/
+03_Remotion_Project/.cache/
+03_Remotion_Project/.remotion/
+03_Remotion_Project/out/**/*
+!03_Remotion_Project/out/**/
+!03_Remotion_Project/out/**/.gitkeep
+
+# Review exports and final-delivery files
+04_Review_Exports/**/*
+!04_Review_Exports/**/
+!04_Review_Exports/**/.gitkeep
+05_Final_Delivery/**/*
+!05_Final_Delivery/**/
+!05_Final_Delivery/**/.gitkeep

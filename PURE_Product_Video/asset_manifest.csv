@@ -1,0 +1,37 @@
+asset_id,category,description,required,status,version,source_or_license,filename,notes
+BRAND-001,brand,Logo simbol resmi PURE dalam format vektor,yes,approved,v1,User-provided project asset,brand_pure-logo-symbol_approved_v1.svg,Official symbol used on the opening and in the top-right brand mark throughout V0.3
+BRAND-002,brand,Palet warna resmi PURE,yes,,,,,Sertakan nilai HEX dan RGB
+BRAND-003,brand,Font utama regular,yes,approved,v1,SIL Open Font License,montserrat-latin-400-normal.woff2,Dimuat lokal dari public/fonts
+BRAND-004,brand,Font utama bold atau semibold,yes,approved,v1,SIL Open Font License,montserrat-latin-700-normal.woff2,Bobot 500 600 dan 800 juga tersedia lokal
+PPG-001,ppg,Waveform PPG bersih,yes,approved_for_review,v1,Synthetic; generated locally,ppg_clean-synthetic_approved_v1.json,30 Hz 10 detik; normalized arbitrary units; not medically validated
+PPG-002,ppg,Waveform PPG dengan artefak gerakan,yes,approved_for_review,v1,Synthetic; generated locally,ppg_mild-artifact-synthetic_approved_v1.json,30 Hz 10 detik; includes accelerometer context
+PPG-003,ppg,Waveform PPG dengan artefak berat,yes,approved_for_review,v1,Synthetic; generated locally,ppg_heavy-artifact-synthetic_approved_v1.json,30 Hz 10 detik; BPM withheld in demo state
+PPG-004,ppg,Preview waveform bersih,yes,approved_for_review,v1,Synthetic; generated locally,ppg_clean-synthetic_approved_v1.svg,Vector preview with visible synthetic-data notice
+PPG-005,ppg,Preview waveform berartefak,yes,approved_for_review,v1,Synthetic; generated locally,ppg_heavy-artifact-synthetic_approved_v1.svg,Vector preview with visible synthetic-data notice
+PPG-006,ppg,Anotasi rentang dan jenis artefak,yes,approved_for_review,v1,Synthetic; generated locally,ppg_demo-sequence-synthetic_approved_v1.json,Per-sample condition status artifact flag and timestamp
+PPG-007,ppg,Output model untuk contoh reliable,yes,not_provided,,,,Tidak dibuat untuk menghindari klaim model atau performa
+PPG-008,ppg,Output model untuk contoh unreliable,yes,not_provided,,,,Tidak dibuat untuk menghindari klaim model atau performa
+PPG-009,ppg,Quality score untuk seluruh contoh demo,yes,approved_for_review,v1,Synthetic; generated locally,ppg_demo-sequence-synthetic_approved_v1.csv,Field bernama demo_quality_score; illustrative UI value only
+DASH-001,dashboard,Screenshot status not assessed,yes,approved_for_review,v1,Project-local source; provenance pending,dashboard_not-assessed_approved_v1.png,1879x894; suitable for internal review
+DASH-002,dashboard,Screenshot status reliable,yes,approved_for_review,v1,Project-local source; provenance pending,dashboard_reliable_approved_v1.png,1882x892; includes simulated fictional data
+DASH-003,dashboard,Screenshot status caution,yes,approved_for_review,v1,Project-local source; provenance pending,dashboard_caution_approved_v1.png,1882x892; includes corrective guidance
+DASH-004,dashboard,Screenshot status unreliable,yes,approved_for_review,v1,Project-local source; provenance pending,dashboard_unreliable_approved_v1.png,1881x895; BPM withheld
+DASH-005,dashboard,Dashboard dengan BPM ditampilkan,yes,,,,,PNG minimal 1920x1080
+DASH-006,dashboard,Dashboard dengan BPM ditahan,yes,,,,,PNG minimal 1920x1080
+DASH-007,dashboard,Tampilan corrective guidance,yes,,,,,PNG minimal 1920x1080
+DASH-008,dashboard,Screen recording alur demo utama,yes,,,,,MP4 H.264 1920x1080 30 fps
+DASH-009,dashboard,Diagram user flow dashboard,yes,,,,,SVG atau PNG 1920x1080
+HW-001,hardware,Foto atau render sensor MAX30102,yes,approved_for_review,v1,Project-local source; provenance pending,hardware_max30102-render_approved_v1.png,1920x1080; below final 3000 px target
+HW-002,hardware,Foto atau render board ESP32-C3,yes,approved_for_review,v1,Project-local source; provenance pending,hardware_esp32-c3-render_approved_v1.png,1920x1080; below final 3000 px target
+HW-003,hardware,Foto atau render sensor MPU6050,yes,approved_for_review,v1,Project-local source; provenance pending,hardware_mpu6050-render_approved_v1.png,1920x1080; below final 3000 px target
+HW-004,hardware,Foto atau render wearable prototype,yes,approved_for_review,v1,Project-local source; provenance pending,hardware_pure-prototype-front_approved_v1.png,Front and side views promoted for internal review
+HW-005,hardware,Rekaman sensor untuk contoh demo,yes,,,,,CSV atau JSON dengan timestamp dan unit
+ARCH-001,architecture,Diagram arsitektur sistem PURE,yes,approved_for_review,v1,Project-local source; provenance pending,architecture_system-diagram_approved_v1.png,1672x941 PNG; suitable for internal review
+ICON-001,icons,Set ikon sensor konektivitas AI kualitas dan dashboard,yes,,,,,SVG dengan gaya visual konsisten
+AUDIO-001,audio,Voice-over utama,no,external_edit,,,,User will add voice-over independently after delivery of the silent V0.3 master
+AUDIO-002,audio,Musik latar berlisensi,yes,missing,,,,No licensed music found
+AUDIO-003,audio,Sound effects untuk transisi dan UI,yes,unresolved_license,v1,License or original creation record not found,audio_status-change_review_v1.wav,Three WAV candidates archived in raw assets but excluded from render
+SRC-001,sources,Daftar sumber untuk klaim teknis dan produk,yes,,,,,PDF MD atau TXT dengan URL dan tanggal akses
+LEGAL-001,licenses,Bukti lisensi seluruh aset pihak ketiga,yes,,,,,PDF MD atau TXT
+LEGAL-002,disclaimer,Teks disclaimer produk yang telah disetujui,yes,,,,,MD atau TXT; menunggu persetujuan produk atau legal
+DECK-001,deck,Pitch deck visual source for V0.3 hybrid video,yes,approved,v1,User-provided Canva PDF export,PURE.pdf,Slides 1 3 4 5 6 7 9 10 and 11 rendered locally at 1920x1080

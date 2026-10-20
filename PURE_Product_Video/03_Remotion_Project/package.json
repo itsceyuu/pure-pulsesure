@@ -1,0 +1,30 @@
+{
+  "name": "pure-product-video-animatic",
+  "version": "0.3.0",
+  "private": true,
+  "description": "PURE final silent explainer using the refined V0.2 visual direction",
+  "scripts": {
+    "dev": "remotion studio src/index.ts",
+    "start": "remotion studio src/index.ts",
+    "build": "remotion bundle src/index.ts",
+    "typecheck": "tsc --noEmit",
+    "generate:ppg": "node scripts/generate-synthetic-ppg.mjs",
+    "qa:assets": "node scripts/check-assets.mjs",
+    "render": "remotion render src/index.ts PUREExplainer ../05_Final_Delivery/master_video/PUREExplainer-v0.3-final-silent.mp4",
+    "render:preview": "remotion render src/index.ts PUREExplainer out/PUREExplainer-v0.3-preview.mp4 --scale=0.5 --crf=28"
+  },
+  "dependencies": {
+    "@remotion/fonts": "4.0.536",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "remotion": "4.0.536"
+  },
+  "devDependencies": {
+    "@fontsource/montserrat": "5.3.0",
+    "@remotion/cli": "4.0.536",
+    "@types/node": "24.19.2",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "typescript": "5.9.3"
+  }
+}

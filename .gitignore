@@ -1,0 +1,171 @@
+# macOS, editor, and temporary files
+.DS_Store
+*.log
+*.tmp
+*.swp
+*.swo
+*~
+
+# Secrets, credentials, and machine-local configuration
+.env
+.env.*
+*.env
+!.env.example
+!.env.template
+.npmrc
+.pypirc
+.netrc
+credentials.json
+credentials.*.json
+secrets.json
+secrets.*.json
+service-account*.json
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.mobileprovision
+*.kdbx
+*.token
+id_rsa
+id_ed25519
+.aws/
+.ssh/
+.codex/
+.agents/
+.idea/
+.vscode/
+
+# Local databases, notebooks, archives, and dataset-like files
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+*.csv
+*.tsv
+*.jsonl
+*.ndjson
+*.avro
+*.arrow
+*.feather
+*.ipynb
+*.zip
+*.7z
+*.rar
+*.tar
+*.tar.gz
+*.tgz
+
+# Private/source media is opt-in. Only licensed local fonts are explicitly
+# allowed for the Remotion runtime farther below.
+*.aac
+*.aiff
+*.flac
+*.m4a
+*.mp3
+*.ogg
+*.wav
+*.mkv
+*.mov
+*.mp4
+*.webm
+*.srt
+*.vtt
+*.bmp
+*.gif
+*.heic
+*.jpeg
+*.jpg
+*.png
+*.tif
+*.tiff
+*.webp
+*.pdf
+*.ppt
+*.pptx
+
+# Repository datasets
+# Keep all downloaded, raw, processed, and derived datasets out of GitHub.
+/data/
+/dataset/
+/datasets/
+**/data/**/*
+
+# Common biomedical and machine-learning dataset artifacts
+*.dat
+*.hea
+*.qrs
+*.mat
+*.h5
+*.hdf5
+*.parquet
+*.npy
+*.npz
+*.pkl
+*.pickle
+*.joblib
+*.pt
+*.pth
+*.ckpt
+
+# PURE video raw assets and datasets
+/PURE_Product_Video/01_Raw_Assets/**/*
+!/PURE_Product_Video/01_Raw_Assets/**/
+!/PURE_Product_Video/01_Raw_Assets/**/.gitkeep
+!/PURE_Product_Video/01_Raw_Assets/ASSET_GUIDE.md
+!/PURE_Product_Video/01_Raw_Assets/asset-inventory-v1.csv
+
+# Internal planning inputs and review notes
+/PURE_Product_Video/00_Project_Planning/external_sources/**/*
+!/PURE_Product_Video/00_Project_Planning/external_sources/**/
+!/PURE_Product_Video/00_Project_Planning/external_sources/**/.gitkeep
+/PURE_Product_Video/00_Project_Planning/review_notes/**/*
+!/PURE_Product_Video/00_Project_Planning/review_notes/**/
+!/PURE_Product_Video/00_Project_Planning/review_notes/**/.gitkeep
+/PURE_Product_Video/00_Project_Planning/voiceover_script/**/*
+!/PURE_Product_Video/00_Project_Planning/voiceover_script/**/
+!/PURE_Product_Video/00_Project_Planning/voiceover_script/**/.gitkeep
+
+# Project source material that must stay local/private
+/VO/
+/PURE_Product_Video/dashboard-image/
+/PURE_Product_Video/images component/
+/PURE_Product_Video/pitch_deck/
+/PURE_Product_Video/PURE_Biomedical_AI_Pitch_Deck_graphic_v6.pptx/
+/PURE_Product_Video/*.wav
+
+# PURE video approved production assets
+/PURE_Product_Video/02_Approved_Assets/**/*
+!/PURE_Product_Video/02_Approved_Assets/**/
+!/PURE_Product_Video/02_Approved_Assets/**/.gitkeep
+
+# Remotion media, local data, dependencies, caches, and renders
+/PURE_Product_Video/03_Remotion_Project/public/**/*
+!/PURE_Product_Video/03_Remotion_Project/public/**/
+!/PURE_Product_Video/03_Remotion_Project/public/**/.gitkeep
+!/PURE_Product_Video/03_Remotion_Project/public/fonts/*.woff2
+!/PURE_Product_Video/03_Remotion_Project/public/fonts/Montserrat-LICENSE.txt
+/PURE_Product_Video/03_Remotion_Project/src/data/**/*
+!/PURE_Product_Video/03_Remotion_Project/src/data/**/
+!/PURE_Product_Video/03_Remotion_Project/src/data/**/.gitkeep
+/PURE_Product_Video/03_Remotion_Project/node_modules/
+/PURE_Product_Video/03_Remotion_Project/.cache/
+/PURE_Product_Video/03_Remotion_Project/.remotion/
+/PURE_Product_Video/03_Remotion_Project/out/**/*
+!/PURE_Product_Video/03_Remotion_Project/out/**/
+!/PURE_Product_Video/03_Remotion_Project/out/**/.gitkeep
+
+# Review exports and final-delivery files
+/PURE_Product_Video/04_Review_Exports/**/*
+!/PURE_Product_Video/04_Review_Exports/**/
+!/PURE_Product_Video/04_Review_Exports/**/.gitkeep
+/PURE_Product_Video/05_Final_Delivery/**/*
+!/PURE_Product_Video/05_Final_Delivery/**/
+!/PURE_Product_Video/05_Final_Delivery/**/.gitkeep
+
+# Project documentation CSVs are safe metadata, not measurement datasets.
+!/PURE_Product_Video/asset_manifest.csv
+!/PURE_Product_Video/01_Raw_Assets/asset-inventory-v1.csv
