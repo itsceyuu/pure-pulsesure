@@ -122,6 +122,10 @@ id_ed25519
 /data/demo/*
 !/data/demo/.gitkeep
 
+# Keep trained models local; version the model selection metadata.
+/models/*
+!/models/model_selection.json
+
 # Common biomedical and machine-learning dataset artifacts
 *.dat
 *.hea

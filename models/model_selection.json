@@ -1,0 +1,40 @@
+{
+  "selected_model": "random_forest",
+  "feature_columns": [
+    "raw_range",
+    "raw_std",
+    "derivative_rms",
+    "derivative_std",
+    "zero_crossing_rate",
+    "clipping_ratio",
+    "skewness",
+    "excess_kurtosis",
+    "spectral_entropy",
+    "dominant_frequency_hz",
+    "pulse_band_power_ratio",
+    "peak_count",
+    "peak_interval_cv"
+  ],
+  "seed": 2026,
+  "validation_metrics": {
+    "logistic_regression": {
+      "precision_good": 0.37362637362637363,
+      "recall_good": 0.723404255319149,
+      "f1_good": 0.4927536231884058,
+      "balanced_accuracy": 0.7235761179665212,
+      "roc_auc": 0.8132425898555209,
+      "average_precision": 0.693398391470765,
+      "false_acceptance_rate_at_0_5": 0.2762520193861066
+    },
+    "random_forest": {
+      "precision_good": 0.6349206349206349,
+      "recall_good": 0.5673758865248227,
+      "f1_good": 0.599250936329588,
+      "balanced_accuracy": 0.7465312389005374,
+      "roc_auc": 0.7713997639752976,
+      "average_precision": 0.558140262261893,
+      "false_acceptance_rate_at_0_5": 0.07431340872374798
+    }
+  },
+  "selection_rule": "lowest validation false acceptance rate at 0.5, then highest average precision"
+}
