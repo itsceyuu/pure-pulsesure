@@ -1,0 +1,34 @@
+# PURE AI Notebooks
+
+The notebooks document each experimental stage while keeping production logic
+inside `apps/ai-service/app/`. They are intended to run from a local machine or
+an SSH training server after cloning the same repository.
+
+Run them in order:
+
+1. `01_eda_but_ppg.ipynb` - dataset integrity, labels, subjects, motion, HR, and waveform review.
+2. `02_preprocessing_but_ppg.ipynb` - waveform decoding, filtering, normalization, features, and batch preparation.
+3. `03_train_baselines.ipynb` - Logistic Regression and Random Forest baselines.
+4. `04_evaluate_quality_gate.ipynb` - validation thresholds and final held-out evaluation.
+
+Install notebook-only dependencies from the repository root:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r apps/ai-service/requirements-notebooks.txt
+jupyter lab
+```
+
+By default, notebooks expect BUT PPG v2 at
+`data/raw/but-ppg-2.0.0`. On a server, set a different location without editing
+the notebooks:
+
+```bash
+export PURE_BUT_PPG_DIR=/absolute/path/to/but-ppg-2.0.0
+export PURE_PROCESSED_DIR=/absolute/path/to/processed/but-ppg-v2
+```
+
+Generated datasets and model binaries remain ignored by Git. Commit only code,
+notebooks, documentation, and small JSON metric/threshold summaries that the
+team intentionally reviews.

@@ -68,6 +68,10 @@ id_ed25519
 *.tar.gz
 *.tgz
 
+# Version the curated AI workflow notebooks, but never local Jupyter state.
+!/notebooks/*.ipynb
+/notebooks/.ipynb_checkpoints/
+
 # Private/source media is opt-in. Only licensed local fonts are explicitly
 # allowed for the Remotion runtime farther below.
 *.aac
