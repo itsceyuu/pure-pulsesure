@@ -1,0 +1,17 @@
+{
+  "model": "PPGQualityResNet1D",
+  "binary_threshold": 0.28,
+  "lower_threshold": 0.024496644295302017,
+  "upper_threshold": 0.38483221476510066,
+  "calibration": {
+    "method": "platt_logistic_validation_subjects",
+    "coefficient": 0.9682208299636841,
+    "intercept": -1.2886351346969604
+  },
+  "quality_score_definition": "round(100 * calibrated_good_quality_probability)",
+  "status_policy": {
+    "reliable": "probability >= upper_threshold",
+    "caution": "lower_threshold < probability < upper_threshold",
+    "unreliable": "probability <= lower_threshold"
+  }
+}

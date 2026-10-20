@@ -1,0 +1,218 @@
+{
+  "test_binary": {
+    "threshold": 0.23500000000000001,
+    "accuracy": 0.7375,
+    "balanced_accuracy": 0.7461827284105131,
+    "precision_good": 0.5038759689922481,
+    "recall_good_sensitivity": 0.7647058823529411,
+    "specificity_poor": 0.7276595744680852,
+    "f1_good": 0.6074766355140186,
+    "false_acceptance_rate": 0.2723404255319149,
+    "false_rejection_rate": 0.23529411764705882,
+    "roc_auc": 0.8247058823529412,
+    "average_precision": 0.6069637318737133,
+    "confusion_matrix": [
+      [
+        342,
+        128
+      ],
+      [
+        40,
+        130
+      ]
+    ]
+  },
+  "test_gate": {
+    "lower_threshold": 0.07319095477386936,
+    "upper_threshold": 0.41067839195979905,
+    "false_acceptance_rate": 0.17659574468085107,
+    "false_rejection_rate": 0.029411764705882353,
+    "good_acceptance_rate": 0.6823529411764706,
+    "poor_rejection_rate": 0.3191489361702128,
+    "reliable_coverage": 0.3109375,
+    "caution_rate": 0.446875,
+    "unreliable_rate": 0.2421875
+  },
+  "reliable_precision": 0.5829145728643216,
+  "branch_test_metrics": {
+    "waveform": {
+      "threshold": 0.44,
+      "accuracy": 0.7328125,
+      "balanced_accuracy": 0.73360450563204,
+      "precision_good": 0.49800796812749004,
+      "recall_good_sensitivity": 0.7352941176470589,
+      "specificity_poor": 0.7319148936170212,
+      "f1_good": 0.5938242280285035,
+      "false_acceptance_rate": 0.2680851063829787,
+      "false_rejection_rate": 0.2647058823529412,
+      "roc_auc": 0.8062202753441803,
+      "average_precision": 0.6101183289406862,
+      "confusion_matrix": [
+        [
+          344,
+          126
+        ],
+        [
+          45,
+          125
+        ]
+      ]
+    },
+    "stft": {
+      "threshold": 0.45,
+      "accuracy": 0.75,
+      "balanced_accuracy": 0.730287859824781,
+      "precision_good": 0.5223214285714286,
+      "recall_good_sensitivity": 0.6882352941176471,
+      "specificity_poor": 0.7723404255319148,
+      "f1_good": 0.5939086294416244,
+      "false_acceptance_rate": 0.2276595744680851,
+      "false_rejection_rate": 0.31176470588235294,
+      "roc_auc": 0.7911514392991239,
+      "average_precision": 0.5609403791862831,
+      "confusion_matrix": [
+        [
+          363,
+          107
+        ],
+        [
+          53,
+          117
+        ]
+      ]
+    },
+    "sqi": {
+      "threshold": 0.36000000000000004,
+      "accuracy": 0.7703125,
+      "balanced_accuracy": 0.7647684605757197,
+      "precision_good": 0.5493562231759657,
+      "recall_good_sensitivity": 0.7529411764705882,
+      "specificity_poor": 0.776595744680851,
+      "f1_good": 0.6352357320099256,
+      "false_acceptance_rate": 0.22340425531914893,
+      "false_rejection_rate": 0.24705882352941178,
+      "roc_auc": 0.8264705882352941,
+      "average_precision": 0.6099281198902917,
+      "confusion_matrix": [
+        [
+          365,
+          105
+        ],
+        [
+          42,
+          128
+        ]
+      ]
+    }
+  },
+  "test_records": 640,
+  "test_subjects": 7,
+  "by_measurement_spot": {
+    "0": {
+      "records": 204,
+      "good": 50,
+      "poor": 154,
+      "accuracy": 0.8872549019607843,
+      "recall_good": 0.84,
+      "specificity_poor": 0.9025974025974026,
+      "false_acceptance_rate": 0.09740259740259741
+    },
+    "1": {
+      "records": 436,
+      "good": 120,
+      "poor": 316,
+      "accuracy": 0.6674311926605505,
+      "recall_good": 0.7333333333333333,
+      "specificity_poor": 0.6424050632911392,
+      "false_acceptance_rate": 0.3575949367088608
+    }
+  },
+  "by_motion": {
+    "0": {
+      "records": 447,
+      "good": 143,
+      "poor": 304,
+      "accuracy": 0.7315436241610739,
+      "recall_good": 0.8041958041958042,
+      "specificity_poor": 0.6973684210526315,
+      "false_acceptance_rate": 0.3026315789473684
+    },
+    "1": {
+      "records": 24,
+      "good": 6,
+      "poor": 18,
+      "accuracy": 0.75,
+      "recall_good": 0.6666666666666666,
+      "specificity_poor": 0.7777777777777778,
+      "false_acceptance_rate": 0.2222222222222222
+    },
+    "2": {
+      "records": 24,
+      "good": 2,
+      "poor": 22,
+      "accuracy": 0.6666666666666666,
+      "recall_good": 0.5,
+      "specificity_poor": 0.6818181818181818,
+      "false_acceptance_rate": 0.3181818181818182
+    },
+    "2;3": {
+      "records": 1,
+      "good": 0,
+      "poor": 1,
+      "accuracy": 0.0,
+      "recall_good": null,
+      "specificity_poor": 0.0,
+      "false_acceptance_rate": 1.0
+    },
+    "3": {
+      "records": 24,
+      "good": 1,
+      "poor": 23,
+      "accuracy": 0.9166666666666666,
+      "recall_good": 0.0,
+      "specificity_poor": 0.9565217391304348,
+      "false_acceptance_rate": 0.043478260869565216
+    },
+    "4": {
+      "records": 24,
+      "good": 2,
+      "poor": 22,
+      "accuracy": 0.7916666666666666,
+      "recall_good": 1.0,
+      "specificity_poor": 0.7727272727272727,
+      "false_acceptance_rate": 0.22727272727272727
+    },
+    "5": {
+      "records": 24,
+      "good": 2,
+      "poor": 22,
+      "accuracy": 0.7083333333333334,
+      "recall_good": 0.5,
+      "specificity_poor": 0.7272727272727273,
+      "false_acceptance_rate": 0.2727272727272727
+    },
+    "6": {
+      "records": 48,
+      "good": 6,
+      "poor": 42,
+      "accuracy": 0.75,
+      "recall_good": 0.16666666666666666,
+      "specificity_poor": 0.8333333333333334,
+      "false_acceptance_rate": 0.16666666666666666
+    },
+    "7": {
+      "records": 24,
+      "good": 8,
+      "poor": 16,
+      "accuracy": 0.7083333333333334,
+      "recall_good": 0.75,
+      "specificity_poor": 0.6875,
+      "false_acceptance_rate": 0.3125
+    }
+  },
+  "limitations": [
+    "These original test subjects were previously inspected during V2 development and are now an audit set.",
+    "Primary development evidence is the subject-wise OOF result in oof_metrics.json.",
+    "BUT PPG smartphone-camera measurements do not replace MAX30102 domain validation."
+  ]
+}

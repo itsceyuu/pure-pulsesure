@@ -13,6 +13,9 @@ Run them in order:
 5. `05_preprocess_waveforms_v2.ipynb` - corrected red-channel, waveform-preserving preprocessing.
 6. `06_train_waveform_resnet.ipynb` - compact ResNet1D training with class-weighted loss.
 7. `07_evaluate_waveform_resnet.ipynb` - validation-only calibration and held-out evaluation.
+8. `08_prepare_multiview_v3.ipynb` - PPG/FDP/SDP, log-STFT, and extended SQI preparation.
+9. `09_train_subject_ensemble_v3.ipynb` - five-fold subject ensemble with OOF calibration.
+10. `10_evaluate_ensemble_v3.ipynb` - frozen V3 audit on the original test subjects.
 
 Install notebook-only dependencies from the repository root:
 
@@ -38,6 +41,13 @@ channel mismatch and retain temporal information that the feature baseline
 discarded. Compare models on the same subject-disjoint test set using balanced
 accuracy, good-class F1, specificity, and false-acceptance rate in addition to
 ordinary accuracy.
+
+V3 addresses the large V2 validation-to-test gap. It combines a compact
+no-SE waveform CNN, a small STFT CNN, and an SQI ExtraTrees branch. Five
+subject-disjoint folds produce out-of-fold development predictions; the
+original V2 test subjects remain excluded until notebook 10. Since those test
+results informed the decision to build V3, V3 OOF metrics are the primary
+performance estimate and notebook 10 is an audit comparison.
 
 Generated datasets and model binaries remain ignored by Git. Commit only code,
 notebooks, documentation, and small JSON metric/threshold summaries that the

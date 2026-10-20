@@ -21,6 +21,12 @@ from app.services.waveform_preprocessing import (  # noqa: E402
     WaveformPreprocessingConfig,
     preprocess_waveform_views,
 )
+from app.services.v3_preprocessing import (  # noqa: E402
+    V3PreprocessingConfig,
+    create_log_stft,
+    extract_v3_sqi_features,
+    preprocess_ppg_fdp_sdp,
+)
 
 
 class LoaderTests(unittest.TestCase):
@@ -123,6 +129,25 @@ class PreprocessingTests(unittest.TestCase):
 
         self.assertEqual(views.shape, (3, 300))
         np.testing.assert_allclose(views, 0.0, atol=1e-7)
+
+    def test_v3_representations_are_finite_and_aligned(self) -> None:
+        sampling_rate_hz = 30.0
+        time = np.arange(300) / sampling_rate_hz
+        waveform = np.sin(2 * np.pi * 1.2 * time) + 0.08 * np.sin(2 * np.pi * 2.4 * time)
+        config = V3PreprocessingConfig(sampling_rate_hz=sampling_rate_hz)
+
+        views = preprocess_ppg_fdp_sdp(waveform, config)
+        spectrogram = create_log_stft(views[0], config)
+        features = extract_v3_sqi_features(waveform, views, sampling_rate_hz)
+
+        self.assertEqual(views.shape, (3, 300))
+        self.assertEqual(spectrogram.ndim, 3)
+        self.assertEqual(spectrogram.shape[0], 1)
+        self.assertTrue(np.isfinite(views).all())
+        self.assertTrue(np.isfinite(spectrogram).all())
+        self.assertGreaterEqual(len(features), 20)
+        self.assertTrue(all(np.isfinite(value) for value in features.values()))
+        self.assertGreater(features["template_correlation"], 0.5)
 
 
 if __name__ == "__main__":

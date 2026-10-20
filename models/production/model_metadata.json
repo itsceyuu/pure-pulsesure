@@ -1,0 +1,16 @@
+{
+  "architecture": "PPGQualityResNet1D",
+  "input_shape": [
+    3,
+    300
+  ],
+  "sampling_rate_hz": 30.0,
+  "view_order": [
+    "raw_robust",
+    "butterworth_bandpass",
+    "first_derivative"
+  ],
+  "channel_policy": "PPG_R matches BUT PPG annotations",
+  "model_file": "quality_model.pt",
+  "threshold_file": "quality_gate_thresholds.json"
+}

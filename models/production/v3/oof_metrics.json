@@ -1,0 +1,467 @@
+{
+  "oof_binary": {
+    "threshold": 0.23500000000000001,
+    "accuracy": 0.8648399014778325,
+    "balanced_accuracy": 0.8096470891293148,
+    "precision_good": 0.6524137931034483,
+    "recall_good_sensitivity": 0.7166666666666667,
+    "specificity_poor": 0.9026275115919629,
+    "f1_good": 0.6830324909747293,
+    "false_acceptance_rate": 0.0973724884080371,
+    "false_rejection_rate": 0.2833333333333333,
+    "roc_auc": 0.8902235258301721,
+    "average_precision": 0.6718450913987538,
+    "confusion_matrix": [
+      [
+        2336,
+        252
+      ],
+      [
+        187,
+        473
+      ]
+    ]
+  },
+  "oof_gate": {
+    "lower_threshold": 0.07319095477386936,
+    "upper_threshold": 0.41067839195979905,
+    "false_acceptance_rate": 0.049845440494590415,
+    "false_rejection_rate": 0.05,
+    "good_acceptance_rate": 0.5893939393939394,
+    "poor_rejection_rate": 0.527047913446677,
+    "reliable_coverage": 0.15948275862068967,
+    "caution_rate": 0.4104064039408867,
+    "unreliable_rate": 0.43011083743842365
+  },
+  "branch_oof_metrics": {
+    "waveform": {
+      "selected_threshold": 0.44,
+      "threshold": 0.44,
+      "accuracy": 0.8509852216748769,
+      "balanced_accuracy": 0.777249309165847,
+      "precision_good": 0.6282798833819242,
+      "recall_good_sensitivity": 0.6530303030303031,
+      "specificity_poor": 0.901468315301391,
+      "f1_good": 0.6404160475482912,
+      "false_acceptance_rate": 0.09853168469860897,
+      "false_rejection_rate": 0.346969696969697,
+      "roc_auc": 0.8562994707507845,
+      "average_precision": 0.6329923707489035,
+      "confusion_matrix": [
+        [
+          2333,
+          255
+        ],
+        [
+          229,
+          431
+        ]
+      ]
+    },
+    "stft": {
+      "selected_threshold": 0.45,
+      "threshold": 0.45,
+      "accuracy": 0.8457512315270936,
+      "balanced_accuracy": 0.7643705212870592,
+      "precision_good": 0.6188340807174888,
+      "recall_good_sensitivity": 0.6272727272727273,
+      "specificity_poor": 0.901468315301391,
+      "f1_good": 0.6230248306997742,
+      "false_acceptance_rate": 0.09853168469860897,
+      "false_rejection_rate": 0.37272727272727274,
+      "roc_auc": 0.8420697508313428,
+      "average_precision": 0.6158862982756956,
+      "confusion_matrix": [
+        [
+          2333,
+          255
+        ],
+        [
+          246,
+          414
+        ]
+      ]
+    },
+    "sqi": {
+      "selected_threshold": 0.36000000000000004,
+      "threshold": 0.36000000000000004,
+      "accuracy": 0.8577586206896551,
+      "balanced_accuracy": 0.7927872230808861,
+      "precision_good": 0.640625,
+      "recall_good_sensitivity": 0.6833333333333333,
+      "specificity_poor": 0.902241112828439,
+      "f1_good": 0.6612903225806451,
+      "false_acceptance_rate": 0.09775888717156105,
+      "false_rejection_rate": 0.31666666666666665,
+      "roc_auc": 0.8781409535853123,
+      "average_precision": 0.6566803245075247,
+      "confusion_matrix": [
+        [
+          2335,
+          253
+        ],
+        [
+          209,
+          451
+        ]
+      ]
+    },
+    "raw_equal_weight_ensemble": {
+      "selected_threshold": 0.37,
+      "threshold": 0.37,
+      "accuracy": 0.8673029556650246,
+      "balanced_accuracy": 0.8106283078075969,
+      "precision_good": 0.6601398601398601,
+      "recall_good_sensitivity": 0.7151515151515152,
+      "specificity_poor": 0.9061051004636785,
+      "f1_good": 0.6865454545454546,
+      "false_acceptance_rate": 0.09389489953632148,
+      "false_rejection_rate": 0.28484848484848485,
+      "roc_auc": 0.8902235258301721,
+      "average_precision": 0.6718450913987538,
+      "confusion_matrix": [
+        [
+          2345,
+          243
+        ],
+        [
+          188,
+          472
+        ]
+      ]
+    }
+  },
+  "folds": [
+    {
+      "fold": 1,
+      "train_subjects": [
+        "100",
+        "101",
+        "103",
+        "105",
+        "107",
+        "109",
+        "112",
+        "113",
+        "114",
+        "115",
+        "117",
+        "118",
+        "119",
+        "120",
+        "121",
+        "122",
+        "124",
+        "125",
+        "127",
+        "128",
+        "129",
+        "130",
+        "132",
+        "133",
+        "135",
+        "136",
+        "138",
+        "143",
+        "144",
+        "145",
+        "146",
+        "147",
+        "148"
+      ],
+      "validation_subjects": [
+        "102",
+        "106",
+        "108",
+        "110",
+        "111",
+        "116",
+        "123",
+        "134",
+        "140",
+        "141"
+      ],
+      "train_records": 2688,
+      "validation_records": 560,
+      "waveform": {
+        "best_auc": 0.891167107322074,
+        "best_epoch": 33,
+        "epochs_completed": 41,
+        "positive_weight": 2.015476840019594,
+        "parameter_count": 44657
+      },
+      "stft": {
+        "best_auc": 0.8632349502688896,
+        "best_epoch": 31,
+        "epochs_completed": 39,
+        "positive_weight": 2.015476840019594,
+        "parameter_count": 23473
+      }
+    },
+    {
+      "fold": 2,
+      "train_subjects": [
+        "100",
+        "101",
+        "102",
+        "103",
+        "105",
+        "106",
+        "107",
+        "108",
+        "109",
+        "110",
+        "111",
+        "113",
+        "114",
+        "115",
+        "116",
+        "117",
+        "118",
+        "119",
+        "120",
+        "121",
+        "123",
+        "127",
+        "128",
+        "129",
+        "130",
+        "133",
+        "134",
+        "135",
+        "138",
+        "140",
+        "141",
+        "143",
+        "144",
+        "146",
+        "147",
+        "148"
+      ],
+      "validation_subjects": [
+        "112",
+        "122",
+        "124",
+        "125",
+        "132",
+        "136",
+        "145"
+      ],
+      "train_records": 2504,
+      "validation_records": 744,
+      "waveform": {
+        "best_auc": 0.8557727190277525,
+        "best_epoch": 44,
+        "epochs_completed": 50,
+        "positive_weight": 1.9724667297574374,
+        "parameter_count": 44657
+      },
+      "stft": {
+        "best_auc": 0.8468619626337748,
+        "best_epoch": 47,
+        "epochs_completed": 50,
+        "positive_weight": 1.9724667297574374,
+        "parameter_count": 23473
+      }
+    },
+    {
+      "fold": 3,
+      "train_subjects": [
+        "100",
+        "101",
+        "102",
+        "103",
+        "105",
+        "106",
+        "108",
+        "109",
+        "110",
+        "111",
+        "112",
+        "113",
+        "114",
+        "116",
+        "117",
+        "119",
+        "120",
+        "121",
+        "122",
+        "123",
+        "124",
+        "125",
+        "127",
+        "129",
+        "130",
+        "132",
+        "133",
+        "134",
+        "135",
+        "136",
+        "140",
+        "141",
+        "143",
+        "144",
+        "145"
+      ],
+      "validation_subjects": [
+        "107",
+        "115",
+        "118",
+        "128",
+        "138",
+        "146",
+        "147",
+        "148"
+      ],
+      "train_records": 2596,
+      "validation_records": 652,
+      "waveform": {
+        "best_auc": 0.7886867040859437,
+        "best_epoch": 43,
+        "epochs_completed": 50,
+        "positive_weight": 1.9650504372595077,
+        "parameter_count": 44657
+      },
+      "stft": {
+        "best_auc": 0.7711539622186009,
+        "best_epoch": 20,
+        "epochs_completed": 28,
+        "positive_weight": 1.9650504372595077,
+        "parameter_count": 23473
+      }
+    },
+    {
+      "fold": 4,
+      "train_subjects": [
+        "100",
+        "101",
+        "102",
+        "103",
+        "105",
+        "106",
+        "107",
+        "108",
+        "109",
+        "110",
+        "111",
+        "112",
+        "113",
+        "115",
+        "116",
+        "118",
+        "119",
+        "122",
+        "123",
+        "124",
+        "125",
+        "128",
+        "129",
+        "130",
+        "132",
+        "133",
+        "134",
+        "136",
+        "138",
+        "140",
+        "141",
+        "143",
+        "145",
+        "146",
+        "147",
+        "148"
+      ],
+      "validation_subjects": [
+        "114",
+        "117",
+        "120",
+        "121",
+        "127",
+        "135",
+        "144"
+      ],
+      "train_records": 2558,
+      "validation_records": 690,
+      "waveform": {
+        "best_auc": 0.8905832962633453,
+        "best_epoch": 40,
+        "epochs_completed": 48,
+        "positive_weight": 1.9514790997322335,
+        "parameter_count": 44657
+      },
+      "stft": {
+        "best_auc": 0.8680771797153024,
+        "best_epoch": 50,
+        "epochs_completed": 50,
+        "positive_weight": 1.9514790997322335,
+        "parameter_count": 23473
+      }
+    },
+    {
+      "fold": 5,
+      "train_subjects": [
+        "102",
+        "106",
+        "107",
+        "108",
+        "110",
+        "111",
+        "112",
+        "114",
+        "115",
+        "116",
+        "117",
+        "118",
+        "120",
+        "121",
+        "122",
+        "123",
+        "124",
+        "125",
+        "127",
+        "128",
+        "132",
+        "134",
+        "135",
+        "136",
+        "138",
+        "140",
+        "141",
+        "144",
+        "145",
+        "146",
+        "147",
+        "148"
+      ],
+      "validation_subjects": [
+        "100",
+        "101",
+        "103",
+        "105",
+        "109",
+        "113",
+        "119",
+        "129",
+        "130",
+        "133",
+        "143"
+      ],
+      "train_records": 2646,
+      "validation_records": 602,
+      "waveform": {
+        "best_auc": 0.8820328760837145,
+        "best_epoch": 48,
+        "epochs_completed": 50,
+        "positive_weight": 1.9957582136766034,
+        "parameter_count": 44657
+      },
+      "stft": {
+        "best_auc": 0.8613173377911073,
+        "best_epoch": 50,
+        "epochs_completed": 50,
+        "positive_weight": 1.9957582136766034,
+        "parameter_count": 23473
+      }
+    }
+  ],
+  "note": "OOF metrics are primary development estimates; the original test subjects remain audit-only."
+}

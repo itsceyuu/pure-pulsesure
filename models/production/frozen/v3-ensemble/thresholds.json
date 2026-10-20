@@ -1,0 +1,13 @@
+{
+  "binary_threshold": 0.23500000000000001,
+  "lower_threshold": 0.07319095477386936,
+  "upper_threshold": 0.41067839195979905,
+  "branch_fusion": "equal mean of waveform, STFT, and SQI probabilities",
+  "calibration": "Platt logistic calibration fitted to subject-wise OOF ensemble scores",
+  "quality_score_definition": "round(100 * calibrated ensemble score)",
+  "status_policy": {
+    "reliable": "score >= upper_threshold",
+    "caution": "lower_threshold < score < upper_threshold",
+    "unreliable": "score <= lower_threshold"
+  }
+}
