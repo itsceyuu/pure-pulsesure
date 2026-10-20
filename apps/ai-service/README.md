@@ -85,6 +85,23 @@ V3 intentionally keeps three branches separate so their OOF and audit metrics
 can be inspected independently. Do not report only the best branch or tune the
 gate on `test_metrics.json`; thresholds are frozen from subject-wise OOF scores.
 
+## Frozen prototype candidate
+
+The frozen candidate is the calibrated V3 equal-weight ensemble. The decision
+is based on subject-wise OOF development performance, not a post-hoc choice of
+the best audit branch. On the machine that contains the ignored model binaries,
+create and verify the immutable deployment bundle with:
+
+```bash
+python scripts/freeze_v3_production.py
+python scripts/freeze_v3_production.py --verify-only
+```
+
+The bundle is written to `models/production/frozen/v3-ensemble/`. It includes
+the five models from each branch, calibrator, preprocessing contract, frozen
+thresholds, evaluation reports, manifest, and SHA-256 checksums. It is a
+hackathon prototype candidate, not a clinically validated model.
+
 ## Test
 
 The preprocessing test suite requires the AI service dependencies:

@@ -72,6 +72,13 @@ Notebook 09 is the long GPU stage. It writes every fold model and all OOF
 metrics under `models/production/v3/`. Notebook 10 does not retrain or retune;
 it only applies the frozen ensemble to the original audit subjects.
 
+The production freeze decision is recorded in
+`models/production/v3/freeze_decision.json`. Run
+`python scripts/freeze_v3_production.py` on the training host to copy the exact
+ignored binaries into a versioned, checksummed local bundle. Never overwrite a
+frozen bundle; a changed model, threshold, or preprocessing rule is a new
+version.
+
 ## Reproducibility contract
 
 - The default random seed is `2026`.
